@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -5,13 +6,14 @@ const bodyParser = require('body-parser');
 const product = require('./models/productModel');
 
 const app = express();
-const port = 3001;
+const port = process.env.PORT || 3001;
 
 app.use(bodyParser.json());
 app.use(cors());
 
+
 mongoose
-  .connect('mongodb://localhost/react-shopping-cart', {
+  .connect(process.env.MONGO_URI||'mongodb://localhost/react-shopping-cart', {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
@@ -33,6 +35,7 @@ const order = mongoose.model(
     },
   ),
 );
+
 
 app.get('/api/orders', async (req, res) => {
   const orders = await order.find();
